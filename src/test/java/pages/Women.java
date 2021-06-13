@@ -1,44 +1,50 @@
 package pages;
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 public class Women {
 
-//	private static final String URL = "http://automationpractice.com/index.php";
 
-	@FindBy(xpath = " //header/div[3]/div[1]/div[1]/div[6]/ul[1]/li[1]/a[1]")
-	private WebElement women;
+	private final static String URL = "http://automationpractice.com/index.php?id_category=3&controller=category";
 
-//	@FindBy(xpath = "//body/div[@id='page']/div[2]/div[1]/div[3]/div[1]/div[1]/div[1]/ul[1]/li[1]/a[1]")
-//	private WebElement top;
-//	
-//	@FindBy(xpath = "//body/div[@id='page']/div[2]/div[1]/div[3]/div[2]/div[2]/ul[1]/li[2]/div[1]/a[1]/img[1]")
-//	private WebElement blouse;
-//	
-//	@FindBy(xpath = "//body/div[@id='page']/div[2]/div[1]/div[3]/div[2]/ul[1]/li[1]/div[1]/div[2]/div[1]")
-//	private WebElement cart;
-//	
-//	
-//	@FindBy(xpath = "//body[1]/div[1]/div[1]/header[1]/div[3]/div[1]/div[1]/div[4]/div[1]/div[2]/div[4]/a[1]/span[1]")
-//	private WebElement checkout;
+	private WebDriver driver;
 
-	public void womens() {
-		women.click();
+	public Women(WebDriver driver) {
+		this.driver = driver;
+		PageFactory.initElements(driver, this);
 	}
 
-//	public void tops() {
-//		top.click();
-//	}
-//	
-//	public void blouses() {
-//		blouse.click();
-//	}
-//	
-//	public void carts() {
-//		cart.click();
-//	}
-//	public void checkouts() {
-//		checkout.click();
-//	}
+	@FindBy(xpath = "//*[@id=\"block_top_menu\"]/ul/li[1]/a")
+	private WebElement womens;
+
+	public void womens() {
+		womens.click();
+	}
+
+	public static String getUrl() {
+		return URL;
+	}
+
+	@FindBy(id = "search_query_top")
+	private WebElement searchinput;
+
+	@FindBy(name = "submit_search")
+	private WebElement submitbutton;
+
+	public void searchproduct(String product) {
+
+		searchinput.sendKeys(product);
+
+		submitbutton.click();
+	}
+
+	@FindBy(xpath = "//*[@id=\"center_column\"]/p")
+	private WebElement resfound;
+
+	public WebElement searchAssert(String product) {
+			return resfound;
+}
 }

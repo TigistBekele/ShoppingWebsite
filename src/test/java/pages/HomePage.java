@@ -1,36 +1,37 @@
 package pages;
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 public class HomePage {
 
-	private static final String URL = "http://automationpractice.com/index.php";
+	public final static String URL = "http://automationpractice.com/index.php";
 
-	@FindBy(xpath = "//header/div[3]/div[1]/div[1]/div[6]/ul[1]/li[1]/a[1]")
-	private WebElement women;
+	private WebDriver driver;
 
-	@FindBy(xpath = "//header/div[3]/div[1]/div[1]/div[6]/ul[1]/li[2]/a[1]")
-	private WebElement dress;
-
-	@FindBy(xpath = "//header/div[3]/div[1]/div[1]/div[6]/ul[1]/li[3]/a[1]")
-	private WebElement tshirt;
+	// 1
+	public HomePage(WebDriver driver) {
+		this.driver = driver;
+		PageFactory.initElements(driver, this);
+	}
 
 	public static String getUrl() {
 		return URL;
 	}
+	
+	@FindBy(id = "search_query_top")
+	private WebElement searchinput;
+	
+	@FindBy(name  = "submit_search")
+	private WebElement submitbutton;
+	
+	public void searchproduct(String product) {
 
-	public void navWomen() {
-		women.click();
+		searchinput.sendKeys(product);
+		
+		submitbutton.click();
 	}
-
-	public void navDress() {
-		dress.click();
-
-	}
-
-	public void navTshirt() {
-		tshirt.click();
-
-	}
+	
 }

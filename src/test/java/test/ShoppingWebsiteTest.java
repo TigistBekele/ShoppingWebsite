@@ -1,16 +1,13 @@
 package test;
 
-import java.util.concurrent.TimeUnit;
+import static org.junit.Assert.assertTrue;
 
-import org.junit.AfterClass;
+import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.PageFactory;
-
 import pages.Dresses;
 import pages.HomePage;
 import pages.Tshirts;
@@ -18,67 +15,69 @@ import pages.Women;
 
 public class ShoppingWebsiteTest {
 
-	static WebDriver driver;
+	
+	private static final String URL = "http://automationpractice.com/index.php";
+	
+	private WebDriver driver;
+	private WebElement searchproducts;
 
-	@BeforeClass
-	public static void init() {
+
+	@Before
+	public void setup() {
 		System.setProperty("webdriver.chrome.driver", "src/test/resources/driver/chromedriver.exe");
 		driver = new ChromeDriver();
 		driver.manage().window().fullscreen();
 	}
 
-	@Before
-	public void setup() throws TimeoutException {
-		driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
-		driver.get(HomePage.getUrl());
-	}
-
-	@AfterClass
-	public static void teardown() {
-		driver.quit();
-	}
-
+	// 1
 	@Test
-	public void test() throws InterruptedException {
+	public void successfullsearchproduct() throws InterruptedException {
 
-		HomePage nav = PageFactory.initElements(driver, HomePage.class);
+		String product = "Tops";
 
-		Women wom = PageFactory.initElements(driver, Women.class);
+		
+		driver.get(HomePage.URL);
 
-		Dresses dre = PageFactory.initElements(driver, Dresses.class);
+		Dresses dressespage = new Dresses(driver);
+		Tshirts tshirtspage = new Tshirts(driver);
+		Women womenpage = new Women(driver);
 
-		Tshirts tsh = PageFactory.initElements(driver, Tshirts.class);
-
-		nav.navWomen();
+		dressespage.dresses();
+		dressespage.searchproduct(product);
 		Thread.sleep(5000);
 
-		wom.womens();
+		womenpage.womens();
+		womenpage.searchproduct(product);
 		Thread.sleep(5000);
 
-//		wom.tops();
-//		Thread.sleep(5000);
-//		
-//		wom.blouses();
-//		Thread.sleep(5000);
-//		
-//		wom.carts();
-//		Thread.sleep(5000);
-//		
-//		wom.checkouts();
-//		Thread.sleep(5000);
-
-		nav.navDress();
+		tshirtspage.tshirts();
+		tshirtspage.searchproduct(product);
 		Thread.sleep(5000);
 
-		dre.dress();
+		WebElement target1 = dressespage.searchAssert(product);
+		WebElement target2 = womenpage.searchAssert(product);
+		WebElement target3 = tshirtspage.searchAssert(product);
+
+		String resultText1 = target1.getText();
+		String resultText2 = target2.getText();
+		String resultText3 = target3.getText();
+
+		Boolean last1 = resultText1.contains("No results were found for your search ");
+		Boolean last2 = resultText2.contains("No results were found for your search ");
+		Boolean last3 = resultText3.contains("No results were found for your search ");
+
+
+		assertTrue(last1);
+		assertTrue(last2);
+		assertTrue(last3);
 		Thread.sleep(5000);
-
-		nav.navTshirt();
-		Thread.sleep(5000);
-
-		tsh.tshirt();
-		Thread.sleep(5000);
-
-
 	}
+
+
+
+	@After
+	public void tearDown() {
+		driver.close();
+	}
+	
 }
